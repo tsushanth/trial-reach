@@ -1,0 +1,27 @@
+# Nothing that looks like data is ever committed. Keep data outside this repository entirely.
+data/
+raw/
+datasets/
+outputs/
+cache/
+.cache/
+*.csv
+*.tsv
+*.xlsx
+*.xpt
+*.parquet
+*.jsonl
+*.ndjson
+*.sqlite*
+*.db
+*.zip
+*.gz
+*.pdf
+*.gguf
+*.safetensors
+*.pkl
+*.env
+.env*
+__pycache__/
+.pytest_cache/
+.venv/
