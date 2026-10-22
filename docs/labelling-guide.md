@@ -14,11 +14,22 @@ For each criterion record:
 | value | a number for threshold operators; empty for `present` and `absent` |
 | unit | the unit as written, normalized to a short standard form; empty if none |
 
-## Vocabulary
+## Vocabulary (v0.2, 2026-10-22, revised on development data only)
 
-age, sex, pregnancy_or_lactation, systolic_bp, diastolic_bp, bmi, egfr_or_crcl, serum_creatinine, hba1c, diabetes, ldl_c,
-potassium, hemoglobin, nyha_class, lvef, prior_mi, prior_stroke, prior_hf_hospitalization, atrial_fibrillation, current_smoking,
-cancer_history, dialysis, liver_disease, anticoagulant_use, life_expectancy, other
+Measured by the survey, therefore computable: age, sex, pregnancy_or_lactation, systolic_bp, diastolic_bp, bmi, egfr_or_crcl,
+serum_creatinine, hba1c, diabetes, ldl_c, total_cholesterol, hdl_c, triglycerides, alt, ast, albumin, platelets, wbc, uric_acid,
+albuminuria, potassium, hemoglobin, prior_mi, prior_stroke, heart_failure, hypertension, chd_or_angina, copd_or_asthma,
+current_smoking, alcohol_use, cancer_history, dialysis, kidney_failure, liver_disease, statin_use, antihypertensive_use,
+insulin_use.
+
+Not measured, therefore not computable: nyha_class, lvef, atrial_fibrillation, prior_hf_hospitalization, life_expectancy,
+anticoagulant_use, procedure_or_device, imaging_or_ecg_finding, other_lab_value, infection, psychiatric_or_cognitive,
+substance_use_disorder, allergy_or_intolerance, consent_or_compliance, study_logistics, other_drug_or_therapy, other_condition,
+other.
+
+Why v0.2: in the first development run 69% of criteria fell into "other" and only 21% were computable once nothing was
+dropped; many "other" items were measurable by the survey or clearly belong to a named non-computable class. The split
+above is defined from what the survey measures, not from which result looks better.
 
 ## Rules
 
@@ -32,10 +43,8 @@ cancer_history, dialysis, liver_disease, anticoagulant_use, life_expectancy, oth
 
 ## Computable set (frozen with the protocol)
 
-A criterion is computable from the survey only if its variable is in this set: age, sex, pregnancy_or_lactation,
-systolic_bp, diastolic_bp, bmi, serum_creatinine, egfr_or_crcl (estimated with a fixed published equation), hba1c, diabetes, ldl_c,
-potassium, hemoglobin, prior_mi, prior_stroke, current_smoking, cancer_history, dialysis, liver_disease. Everything else is
-not computable. The set is decided from what the survey measures, not from what makes the results look better.
+The computable variables are exactly the first group in the vocabulary. A threshold criterion with no usable number is not
+computable. The set is decided from what the survey measures, not from what makes the results look better.
 
 ## Quality control
 

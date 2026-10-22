@@ -26,6 +26,13 @@ the population estimate because the survey does not measure it, and is reported 
 Trials are split by a fixed random seed into development (prompt design, rule map design), validation (threshold setting) and a
 held-out gold set. The gold set is never used for design decisions.
 
+Split (recorded 2026-10-22, before any extraction output was inspected): the selection above yielded 13,735 unique trials
+(heart failure 2,217; hypertension 4,224; coronary 3,155; stroke 3,273; atrial fibrillation 866; a trial is counted once, in
+the first condition group that found it). Seed 20261022; gold 200, validation 200, development 200, no overlap, each
+stratified in proportion to group size (13, 46, 32, 62, 47 trials for atrial fibrillation, coronary, heart failure,
+hypertension, stroke). The remaining trials are the analysis population for question 2. The id lists are kept outside this
+repository.
+
 ## Extraction method
 
 - A local open-weight model, temperature 0, JSON output, frozen prompt; prompt hash and model tag recorded before the gold run.
@@ -80,3 +87,16 @@ published or stored in this repository.
 ## Change log
 
 - 0.1 (2026-10-22): initial protocol.
+- 0.1.1 (2026-10-22): split recorded (above). Second reviewer for 25% of gold labels named by the owner (an independent family
+  member, blind to model output; background to be reported in aggregate).
+- 0.2 (2026-10-22, development data only; gold and validation sets untouched): the first extraction prompt returned out-of-
+  vocabulary variable names that the parser discarded, which silently removed non-computable criteria from the denominator and
+  inflated the computable share (66% in run 1, from 60 development trials). Parser rule changed: items with a valid type are
+  never discarded; an unknown variable becomes "other" (not computable) and the raw name is kept for diagnostics. With that fix
+  the same 60 trials gave a median of 16.5 criteria per trial, 69% "other", 21% computable, and 95% of trials with fewer than
+  half of criteria computable. Because 69% "other" is too coarse to interpret, the criterion vocabulary was revised (labelling
+  guide v0.2): survey-measurable variables added, named non-computable classes added. The revision is defined by what the
+  survey measures. Expected consequence, stated in advance: most trials will still have a low computable fraction, so population
+  reach will be reported mainly as an upper bound for the minority of trials with a high computable fraction, plus the
+  distribution of the computable fraction itself, which is a finding in its own right.
+

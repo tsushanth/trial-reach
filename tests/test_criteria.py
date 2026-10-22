@@ -16,8 +16,19 @@ def test_parse_keeps_valid_drops_invalid_and_counts():
         "not an object",
     ])
     out, dropped = cr.parse(raw)
-    assert [c.variable for c in out] == ["age", "pregnancy_or_lactation"] and dropped == 3
-    assert out[0].value == 18.0 and out[1].value is None
+    # out-of-vocabulary variable and non-numeric threshold are kept (as other / value None); only bad types and non-objects drop
+    assert [c.variable for c in out] == ["age", "pregnancy_or_lactation", "other", "bmi"] and dropped == 1
+    assert out[0].value == 18.0 and out[1].value is None and out[3].value is None
+    assert [c.computable for c in out] == [True, True, False, False]
+
+
+def test_invalid_type_is_dropped_and_other_stays_in_denominator():
+    out, dropped = cr.parse(reply([
+        {"type": "maybe", "variable": "age", "operator": ">=", "value": 18, "unit": None},
+        {"type": "inclusion", "variable": "consent", "operator": "present", "value": None, "unit": None},
+        {"type": "inclusion", "variable": "age", "operator": ">=", "value": 18, "unit": "years"},
+    ]))
+    assert dropped == 1 and len(out) == 2 and cr.computable_fraction(out) == 0.5
 
 
 def test_parse_unreadable_is_none_not_empty():
