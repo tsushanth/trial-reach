@@ -6,7 +6,8 @@ This project uses a locally run open language model to turn the free-text eligib
 structured rules, and then estimates what share of US adults with the condition those rules would admit, using public
 national survey data. The aim is a transparent, reproducible measure of how well trial populations cover real patients.
 
-Status: protocol stage. No results yet. See [PROTOCOL.md](PROTOCOL.md).
+Status: protocol stage. No results yet. See [PROTOCOL.md](PROTOCOL.md). The running record of all research so far, including
+earlier work and its findings, is in [docs/research-log](docs/research-log/README.md).
 
 ## What this repository contains
 
