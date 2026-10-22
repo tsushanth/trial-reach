@@ -99,4 +99,22 @@ published or stored in this repository.
   survey measures. Expected consequence, stated in advance: most trials will still have a low computable fraction, so population
   reach will be reported mainly as an upper bound for the minority of trials with a high computable fraction, plus the
   distribution of the computable fraction itself, which is a finding in its own right.
+- 0.3 (2026-10-22, before any gold labelling; owner approved the reframe): questions reframed. Per-trial population reach is
+  demoted to a descriptive secondary result because only about a quarter of criteria are computable from a population survey
+  (development findings). New primary question 2: **criterion-level exclusion burden**. Definitions:
+  - Target population: survey-weighted US adults meeting a fixed disease definition (heart failure, hypertension, coronary or
+    prior heart attack, stroke; self-report, measurement or treatment as fixed in advance; atrial fibrillation is not measured and
+    is excluded from the burden analysis).
+  - For a measurable criterion (for example an age cap, a kidney function threshold, a blood pressure or HbA1c limit, pregnancy),
+    the **exclusion burden** is the weighted share of the target population that fails that criterion on its own.
+  - Reported per criterion type and threshold, by condition group, start year and sponsor class, together with how often trials use
+    the criterion. Trial-level burden of a trial is the weighted share failing at least one of its measurable exclusions; this
+    is a lower bound on total exclusion.
+  - Secondary descriptive: distribution of the per-trial computable fraction; reach upper bound only for trials with at least
+    70% computable criteria.
+  Analysis sample: because local extraction takes about 40 seconds per trial, the analysis uses a stratified random sample
+  of 1,500 trials (condition group and start-year strata, seed recorded) from the analysis population, excluding development,
+  validation and gold trials. Extraction is local only (7B model). A hosted model was considered for speed; the registry's
+  terms could not be fully read by the assistant and the owner chose local extraction. The accuracy bar (F1 at least 0.80, lower
+  interval at least 0.75) is now assessed on computable-variable items only.
 
