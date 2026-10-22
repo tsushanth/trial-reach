@@ -1,7 +1,7 @@
 #!/bin/sh
-# Install the guard as a pre-commit hook for this clone. Re-run after cloning.
+# Point this clone at the committed hooks. Uses a per-repo core.hooksPath, which overrides any global hooks path,
+# so the pre-push hook here calls the machine-wide one itself when present.
 set -e
 cd "$(dirname "$0")/.."
-printf '#!/bin/sh\nexec python3 scripts/check_no_data.py\n' > .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
-echo "pre-commit guard installed"
+git config core.hooksPath .githooks
+echo "guard hooks active (pre-commit, pre-push)"

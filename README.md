@@ -24,7 +24,7 @@ environment variable. Nothing about where you keep it is recorded here.
 ## Getting started
 
 ```sh
-sh scripts/install_hooks.sh     # installs the pre-commit guard in your clone
+sh scripts/install_hooks.sh     # activates the pre-commit and pre-push guards in your clone
 python3 -m pytest -q            # tests
 ```
 

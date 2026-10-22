@@ -1,0 +1,6 @@
+#!/bin/sh
+# Guard first, then hand over to the machine-wide secrets scan if one is installed (stdin is passed through untouched).
+python3 scripts/check_no_data.py || exit 1
+GLOBAL="$HOME/.git-hooks/pre-push"
+[ -x "$GLOBAL" ] && exec "$GLOBAL" "$@"
+exit 0
