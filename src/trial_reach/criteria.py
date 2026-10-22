@@ -53,8 +53,26 @@ for requirements without a number; label only what the text says.
 Reply with JSON only: {{"criteria": [{{"type": "...", "variable": "...", "operator": "...", "value": null, "unit": null}}]}}"""
 
 
+SCHEMA = {
+    "type": "object",
+    "properties": {"criteria": {"type": "array", "items": {
+        "type": "object",
+        "properties": {
+            "type": {"enum": list(TYPES)},
+            "variable": {"enum": list(VOCABULARY)},
+            "operator": {"enum": list(OPERATORS)},
+            "value": {"type": ["number", "null"]},
+            "unit": {"type": ["string", "null"]},
+        },
+        "required": ["type", "variable", "operator", "value", "unit"],
+    }}},
+    "required": ["criteria"],
+}
+
+
 def prompt_hash(prompt: str = PROMPT_V1) -> str:
-    return hashlib.sha256(prompt.encode()).hexdigest()
+    """Hash of the prompt text and the decoding schema together: either changing is a new method version."""
+    return hashlib.sha256((prompt + json.dumps(SCHEMA, sort_keys=True)).encode()).hexdigest()
 
 
 def build_prompt(text: str, max_chars: int = 6000) -> str:

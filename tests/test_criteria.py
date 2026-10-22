@@ -65,3 +65,13 @@ def test_extract_uses_injected_model_only():
 
 def test_computable_set_is_inside_vocabulary():
     assert cr.COMPUTABLE <= set(cr.VOCABULARY) and "other" not in cr.COMPUTABLE
+
+
+def test_schema_enums_match_vocabulary_and_payload_uses_it():
+    from trial_reach.llm import OllamaLLM
+
+    item = cr.SCHEMA["properties"]["criteria"]["items"]["properties"]
+    assert item["variable"]["enum"] == list(cr.VOCABULARY) and item["operator"]["enum"] == list(cr.OPERATORS)
+    p = OllamaLLM("m", schema=cr.SCHEMA).payload("x")
+    assert p["format"] == cr.SCHEMA and p["options"]["temperature"] == 0 and p["stream"] is False
+    assert OllamaLLM("m").payload("x")["format"] == "json"
