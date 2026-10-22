@@ -10,7 +10,9 @@ asked to keep searching. A literature gap scan ([05-gap-scan.md](05-gap-scan.md)
 
 **Active project (this repository).** Who do cardiovascular trials leave out? Local-model structuring of trial eligibility
 criteria plus a public survey to estimate population reach. Protocol: [PROTOCOL.md](../../PROTOCOL.md), version 0.1.
-Current step: labelling guide, criterion vocabulary, extraction prompt and parser (see the code in `src/trial_reach`).
+Current step (2026-10-22): development extraction runs showed only about a quarter of trial criteria are computable from a
+population survey ([findings](findings/trial-reach-development.md)); deciding whether to reframe from per-trial reach to
+per-criterion exclusion burden before gold labelling starts. Gold and validation sets untouched.
 
 **Paused or parked.**
 - Progression-date extraction from notes: waiting on real notes with dated labels (credentialing application submitted;
@@ -20,7 +22,8 @@ Current step: labelling guide, criterion vocabulary, extraction prompt and parse
 
 **Open questions for the owner.**
 1. Wording of the data rule: allowed to name kinds of public source in general terms in prose (current reading)?
-2. Who does the clinical or trained-reviewer check on at least 25% of the gold-set labels?
+2. Reframe project 1 to criterion-level exclusion burden (recommended), and local sample versus hosted model for extraction at scale?
+3. Second reviewer for gold labels: named (independent family member, blind to model output).
 
 **Standing constraints.**
 - Only local models touch any restricted note text. Hosted assistants see aggregates only.
