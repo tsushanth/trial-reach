@@ -75,4 +75,16 @@ environment variable. Nothing about where the files live is stored here.
   analysis choice was changed on the basis of results): the primary series is the **all-network** denial rate, available in every release 2022 to
   2026 (combined figure, or in plus out for split releases). The in-network rate is secondary and exists for releases 2024 to 2026 only. Questions 1, 2
   and 6 use the all-network series as primary. The loader now also strips stray quotes from header names.
-
+- 0.3 (2026-10-23, no data touched): attempted an extension to a Medicare Advantage prior-authorization series (organization determinations and
+  reconsiderations, Part C reporting requirements, contract level, years about 2019 to 2024). Finding: the federal agency publishes the reporting
+  requirements and technical specifications, but no downloadable file of the reported counts was found on its public reporting pages. The reported
+  data exist only as a limited data set, one dataset per reporting section, sold per file and year through an order form and payment step, released
+  about the fourth quarter of the following year with no guaranteed timing. Whether a data use agreement is required is UNVERIFIED (the pages
+  fetched did not say; limited data sets from this agency normally need one). A separate service-level pilot collection announced in December 2025
+  is not a public file. Decision: stop; no loader, no analysis, no result. If the owner later obtains the limited data set, the questions below
+  are fixed in advance (same size rules as above: cells under 1,000 determinations and appeal cells under 10 excluded):
+  (1) distribution across contracts of the denial rate by year; (2) Spearman persistence of contract rates across consecutive years;
+  (3) appeal rate among denials and overturn rate among appeals, pooled and by contract distribution; (4) data quality (implausible or suppressed
+  values); (5) pooled national denial rate compared with the published KFF figures (6.4 percent for 2023, 7.7 percent for 2024, prior authorization)
+  as a cross-check only. Caveats to carry: self-reported; Medicare Advantage only; service determinations only; whether partial denials count as
+  denials must be read from the dictionary before any run.

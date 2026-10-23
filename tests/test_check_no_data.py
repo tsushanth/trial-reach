@@ -25,6 +25,7 @@ def test_blocks_identifiers_pii_and_paths():
     assert "absolute local path" in names("saved to /Users/" + "someone/work")
     assert "data directory path" in names("read from (data/" + "trials.json)")
     assert "survey respondent id" in names("SEQ" + "N 12345")
+    assert "survey respondent id" not in names("the SEQ" + "N column links the tables")
     assert "data file URL" in names("download https://example.org/files/table" + ".xpt now")
     assert "secret-like token" in names("key " + "ghp_" + "a" * 36)
 

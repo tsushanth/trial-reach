@@ -133,4 +133,21 @@ published or stored in this repository.
   covers ALL selected trials, not a 1,500-trial sample (supersedes the sampling rule in 0.3). Gold labelling plan: first pass by a
   stronger model (claude-opus-5-5) blind to the pipeline output, line by line, using the labelling guide; at least 25% reviewed by an
   independent human blind to both; agreement reported; the first pass alone is provisional.
+- 0.7 (2026-10-23, before any burden estimate was computed): the SURVEY SIDE is fixed here.
+  - Survey cycle: the 2017 to March 2020 pre-pandemic file set; adults aged 18 and over. Examination weights for examination and laboratory variables
+    and questionnaire items; the fasting-subsample weights for LDL cholesterol and triglycerides. Age is top-coded at 80.
+  - Design-based estimates: proportions are weighted ratios within a domain (the condition group); standard errors by Taylor linearisation over
+    primary sampling units within strata, using all units (domain analysis). Strata with a single unit are skipped.
+  - Condition groups (adults): heart failure (ever told by a doctor); hypertension (ever told, or taking blood-pressure medication, or measured mean
+    systolic 140 or more or diastolic 90 or more); coronary or myocardial infarction (ever told of coronary heart disease, angina or heart attack);
+    stroke (ever told). Atrial fibrillation is not measured and has no population.
+  - Criterion translation: each structured criterion (variable, operator, value, unit) becomes a yes/no/missing flag per person. Present/absent
+    variables use questionnaire items or fixed laboratory cut-offs (diabetes: ever told or HbA1c 6.5 or more; albuminuria: urine albumin-creatinine
+    ratio 30 mg/g or more). Kidney function uses the 2021 race-free CKD-EPI creatinine equation for every "eGFR or creatinine clearance" criterion (a stated
+    limitation: Cockcroft-Gault clearance cannot be told apart in the extracted criteria). Units are converted where the unit text is recognised; a value outside a
+    plausible range after conversion makes the criterion untranslatable instead of guessed. Criteria with no translation are counted, not dropped silently.
+  - A person fails a criterion if an inclusion criterion is false or an exclusion criterion is true. Missing measurements are left out of that criterion's
+    denominator (complete case) and the number left out is reported.
+  - Alcohol use has no translation (no clear single definition) and is reported as untranslatable. Sex criteria are not evaluated.
+  - Trials are assigned to the first condition group that found them; trials listed under several conditions are analysed once, under that group.
 

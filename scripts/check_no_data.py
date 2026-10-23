@@ -34,7 +34,7 @@ RULES = [
     ("phone number", re.compile(r"(?<!\d)(?:\+?1[ .-]?)?\(?\d{3}\)?[ .-]\d{3}[ .-]\d{4}(?!\d)")),
     ("US SSN-like number", re.compile(r"(?<!\d)\d{3}-\d{2}-\d{4}(?!\d)")),
     ("trial registry identifier", re.compile(r"\bNCT" + r"\d{8}\b")),
-    ("survey respondent id", re.compile(r"\bSEQN\b|\bseqn\s*[=:]\s*\d+", re.I)),
+    ("survey respondent id", re.compile(r"\bSEQN\s*[=:]?\s*\d{3,}", re.I)),  # a respondent number; the bare column name is schema, not an identifier
     ("medical record / patient id", re.compile(r"\b(?:MRN|patient[_ ]?id|record[_ ]?id)\s*[=:]\s*\S+", re.I)),
     ("absolute local path", re.compile(r"(?:/Users/|/home/|C:\\Users\\)[A-Za-z0-9._-]+")),
     ("data directory path", re.compile(r"(?:^|[\s\"'(=])(?:\./)?(?:data|raw|datasets)/[\w./-]+", re.I)),

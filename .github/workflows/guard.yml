@@ -9,4 +9,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/check_no_data.py
-      - run: python3 -m pip install pytest openpyxl && python3 -m pytest -q
+      - run: python3 -m pip install pytest openpyxl pandas numpy && python3 -m pytest -q
