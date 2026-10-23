@@ -37,3 +37,23 @@ option, subject to cost.
   items. This is one trial and my own judgement, not a measurement; the gold set measures it.
 - Speed: 7B takes about 70 s per trial, so 1,500 trials is about 30 hours and the 200 gold trials about 4 hours. 14B is about 3
   times that.
+
+## Hosted extraction pilot and first gold evaluation (2026-10-23)
+
+- **Pilot (20 development trials, claude-haiku-5-5, line level):** 353 lines, 0 failed, estimated $0.017. Polarity and grounding were right on the
+  trial the local model got wrong. Computable share 26%, 90% of trials under half computable: consistent with the realistic early estimate
+  (local 7B figures of 41% to 48% were inflated by wrong items).
+- **Cost and speed:** about $0.0007 per trial and about 9.5 minutes per 200 trials at 6 workers, so the whole selection of about 13,700 trials costs
+  about $10 and runs in a few hours; the analysis therefore covers all selected trials (protocol 0.6).
+- **Gold labelling:** first pass by claude-opus-5-5 (effort high, structured output), line by line, blind to the pipeline output, 200 trials, 2,821
+  lines, $4.2. These labels are PROVISIONAL: same model family as the pipeline, no human review yet.
+- **First gold evaluation (frozen pipeline, one shot, 200 trials):**
+  - Item level on computable variables: precision 0.893, recall 0.885, **F1 0.889, 95% CI 0.873 to 0.904** (bootstrap over trials). The protocol bar
+    (F1 at least 0.80, lower interval at least 0.75) is met on the provisional gold.
+  - All variables: F1 0.791 (CI 0.773 to 0.807). Variable level ignoring operator and value, computable: F1 0.907.
+  - Main error variables (computable): sex (19 false positives, 19 false negatives, probably representation of "male and female"), prior stroke,
+    heart failure, platelets (18 misses), alcohol use, kidney failure. 24 false positives are an operator mismatch on a variable the gold also has.
+  - Gold items per trial 19.7; 34% of gold items are on computable variables.
+- **Caveats that matter:** (1) provisional gold from a related model family means correlated errors can hide failures, so F1 is probably an
+  overestimate; (2) the independent human review (at least 25% of trials) is still to be done and decides whether this stands; (3) lines are split by
+  deterministic code shared by pipeline and gold, so splitting errors are not measured.
