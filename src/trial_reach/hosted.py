@@ -8,6 +8,7 @@ credentials from the environment.
 from __future__ import annotations
 
 import json
+import threading
 
 from trial_reach.criteria import SENTINEL
 
@@ -43,6 +44,7 @@ class HostedLLM:
             client = anthropic.Anthropic()
         self.model, self.schema, self.cap, self.client, self.max_tokens = model, hosted_schema(schema), max_cost_usd, client, max_tokens
         self.in_tokens = self.out_tokens = self.cache_read = self.cache_write = self.calls = 0
+        self._lock = threading.Lock()
 
     @property
     def cost(self) -> float:
@@ -61,9 +63,10 @@ class HostedLLM:
             output_config={"effort": "low", "format": {"type": "json_schema", "schema": self.schema}},
         )
         u = r.usage
-        self.calls += 1
-        self.in_tokens += u.input_tokens or 0
-        self.out_tokens += u.output_tokens or 0
-        self.cache_read += getattr(u, "cache_read_input_tokens", 0) or 0
-        self.cache_write += getattr(u, "cache_creation_input_tokens", 0) or 0
+        with self._lock:  # safe to share one client across worker threads
+            self.calls += 1
+            self.in_tokens += u.input_tokens or 0
+            self.out_tokens += u.output_tokens or 0
+            self.cache_read += getattr(u, "cache_read_input_tokens", 0) or 0
+            self.cache_write += getattr(u, "cache_creation_input_tokens", 0) or 0
         return next((b.text for b in r.content if b.type == "text"), "")

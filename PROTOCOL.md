@@ -125,4 +125,12 @@ published or stored in this repository.
   local extraction was too inaccurate and too slow on development trials. Only public trial text is sent; no patient data. The owner
   treated this as permitted; the registry terms were not read in full by the assistant. The line-level method, grounding checks and
   schema are unchanged. Spend is capped in code. The model identifier, prompt hash and schema hash are recorded with every run.
+- 0.6 (2026-10-23, before any gold or validation output was inspected): extraction configuration FROZEN. Model claude-haiku-5-5, thinking
+  disabled, effort low, structured output, one call per line, line prompt hash 6be8edf200eaed93507e3bd9c32633ebf5799b4eb6cfcb0a0721e232b3a0134e.
+  Pilot on 20 development trials: 353 lines, 0 failed, estimated cost $0.017, polarity and grounding correct on the trial that the
+  local model got wrong; computable share 26% and 90% of trials under half computable, in line with the realistic early estimate (the
+  local model's higher figures were inflated by wrong items). Because hosted extraction costs about $0.001 per trial, the analysis now
+  covers ALL selected trials, not a 1,500-trial sample (supersedes the sampling rule in 0.3). Gold labelling plan: first pass by a
+  stronger model (claude-opus-5-5) blind to the pipeline output, line by line, using the labelling guide; at least 25% reviewed by an
+  independent human blind to both; agreement reported; the first pass alone is provisional.
 
