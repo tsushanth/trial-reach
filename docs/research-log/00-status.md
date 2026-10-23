@@ -14,6 +14,12 @@ Current step (2026-10-22): development extraction runs showed only about a quart
 population survey ([findings](findings/trial-reach-development.md)); deciding whether to reframe from per-trial reach to
 per-criterion exclusion burden before gold labelling starts. Gold and validation sets untouched.
 
+**Second project (research track, started 2026-10-23): official claim-denial data.** Protocol `projects/claim-denials/PROTOCOL.md`, first findings
+`projects/claim-denials/FINDINGS.md` (pooled reported denial rate about 17% to 21%, persistence of issuer differences only moderate in early years,
+under 0.5% of denied claims appealed, reported denials include resubmissions). The crowdsourced directory idea was scanned by five parallel
+research tracks (prior art, public data, legal and privacy, credibility design, appeal avenues); decision: no crowdsourced ranking of insurers;
+research first, any outcomes collection only after a lawyer reviews and ideally with an existing appeal-tool partner. Issuer-level tables stay private.
+
 **Paused or parked.**
 - Progression-date extraction from notes: waiting on real notes with dated labels (credentialing application submitted;
   response pending). Harness exists locally and is not yet in this repository.

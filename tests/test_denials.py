@@ -37,7 +37,7 @@ def test_plausibility_and_year_summary():
     its = tic.read_sheet(sheet(good + bad))
     assert [tic.plausible(i) for i in its] == [True] * 5 + [False]
     s = tic.year_summary(its)
-    assert s["implausible"] == 1 and s["with_rate"] == 5 and 0.1 < s["median"] < 0.3
+    assert s["implausible"] == 1 and s["with_rate_in"] == 5 and 0.1 < s["median_in"] < 0.3 and s["with_rate_all"] == 5
     assert s["internal_overturn_pooled"] == pytest.approx(0.5) and s["external_overturn_pooled"] == pytest.approx(0.4)
 
 
@@ -60,3 +60,14 @@ def test_workbook_loader_reads_the_right_sheet(tmp_path):
     p = tmp_path / "x.xlsx"
     wb.save(p)
     assert [i.name for i in tic.load_workbook_issuers(str(p))] == ["Alpha"]
+
+
+def test_combined_format_and_quoted_headers_are_read():
+    old_head = ["State", "Issuer_Name", "Issuer_ID", "Issuer_Claims_Received", "Issuer_Claims_Denials", "Issuer_Internal_Appeals_Filed"]
+    rows = [("t",), ("t",), tuple(old_head), ("TX", "Old", "1", 20000, 3000, 50)]
+    (it,) = tic.read_sheet(rows)
+    assert it.vals["rec_all"] == 20000 and tic.denial_rate(it) == pytest.approx(0.15) and tic.denial_rate(it, "in") is None
+    q = ['State', 'Issuer_Name', 'Issuer_ID', 'Issuer_Claims_Received_In_Network', 'Issuer_Claims_Received_Out_of_Network',
+         'Issuer_Claims_Denied_In_Network', 'Issuer_Claims_Denied_Out_of_Network"']
+    (n,) = tic.read_sheet([("t",), ("t",), tuple(q), ("TX", "New", "2", 9000, 3000, 900, 300)])
+    assert n.vals["den_out"] == 300 and n.vals["rec_all"] == 12000 and tic.denial_rate(n) == pytest.approx(0.10)

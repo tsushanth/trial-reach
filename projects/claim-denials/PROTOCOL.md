@@ -13,7 +13,8 @@ the **official, insurer-reported public data** can and cannot say, before any cr
 
 The federal marketplace transparency file: one release per plan year, issuer- and plan-level counts of claims received, denied and
 resubmitted, internal and external appeals filed and overturned, for individual-market qualified health plans on the federal marketplace
-platform. Self-reported by issuers. Releases from 2022 onward split in-network and out-of-network claims. Earlier releases combine them.
+platform. Self-reported by issuers. Releases up to 2023 report one combined all-network figure; releases from 2024 split in-network and out-of-network claims. (An earlier draft of this
+protocol wrongly said the split starts in 2022; see the change log.)
 Assumption to verify against the data dictionary: the claims in a release refer to services two calendar years earlier.
 
 ## Questions (all descriptive; no causal claims)
@@ -70,3 +71,8 @@ environment variable. Nothing about where the files live is stored here.
 ## Change log
 
 - 0.1 (2026-10-23): initial protocol.
+- 0.2 (2026-10-23, after the first run showed no rates for the 2022 and 2023 releases, which turned out to use a combined all-network format; no
+  analysis choice was changed on the basis of results): the primary series is the **all-network** denial rate, available in every release 2022 to
+  2026 (combined figure, or in plus out for split releases). The in-network rate is secondary and exists for releases 2024 to 2026 only. Questions 1, 2
+  and 6 use the all-network series as primary. The loader now also strips stray quotes from header names.
+

@@ -18,6 +18,7 @@ COLS = {
     "rec_in": "Issuer_Claims_Received_In_Network", "rec_out": "Issuer_Claims_Received_Out_of_Network",
     "den_in": "Issuer_Claims_Denied_In_Network", "den_out": "Issuer_Claims_Denied_Out_of_Network",
     "resub_in": "Issuer_Claims_Resubmitted_In_Network", "resub_out": "Issuer_Claims_Resubmitted_Out_of_Network",
+    "rec_all_raw": "Issuer_Claims_Received", "den_all_raw": "Issuer_Claims_Denials",
     "int_filed": "Issuer_Internal_Appeals_Filed", "int_over": "Issuer_Number_Internal_Appeals_Overturned",
     "ext_filed": "Issuer_External_Appeals_Filed", "ext_over": "Issuer_Number_External_Appeals_Overturned",
 }
@@ -63,7 +64,7 @@ def read_sheet(rows: list[tuple]) -> list[Issuer]:
     hi = next((i for i, r in enumerate(rows) if r and "Issuer_Name" in [str(c) for c in r]), None)
     if hi is None:
         raise ValueError("no header row with Issuer_Name")
-    head = [str(c) if c is not None else "" for c in rows[hi]]
+    head = [str(c).strip().strip('"') if c is not None else "" for c in rows[hi]]
     pos = {h: i for i, h in enumerate(head)}
     out: dict = {}
     for r in rows[hi + 1:]:
@@ -74,6 +75,14 @@ def read_sheet(rows: list[tuple]) -> list[Issuer]:
         if key not in out:
             it = Issuer(key[0], key[1], str(r[pos["Issuer_Name"]]))
             it.vals = {k: num(r[pos[c]]) if c in pos else None for k, c in COLS.items() if k not in ("state", "issuer_id", "issuer_name")}
+            v = it.vals
+            # all-network series: older releases report one combined figure, newer ones split in/out of network
+            if v.get("rec_all_raw") is not None and v.get("den_all_raw") is not None:
+                v["rec_all"], v["den_all"] = v["rec_all_raw"], v["den_all_raw"]
+            elif None not in (v.get("rec_in"), v.get("rec_out"), v.get("den_in"), v.get("den_out")):
+                v["rec_all"], v["den_all"] = v["rec_in"] + v["rec_out"], v["den_in"] + v["den_out"]
+            else:
+                v["rec_all"] = v["den_all"] = None
             out[key] = it
         it = out[key]
         for k, c in PLAN_REASONS.items():
@@ -100,7 +109,8 @@ def load_workbook_issuers(path: str, sheet_hint: str = "Ind QHP") -> list[Issuer
     return read_sheet(list(wb[name].iter_rows(values_only=True)))
 
 
-def denial_rate(it: Issuer, net: str = "in"):
+def denial_rate(it: Issuer, net: str = "all"):
+    """net: "all" (every release), "in" or "out" (releases that split the network). None if missing or under MIN_CLAIMS."""
     rec, den = it.vals.get(f"rec_{net}"), it.vals.get(f"den_{net}")
     if rec is None or den is None or rec < MIN_CLAIMS:
         return None
@@ -109,7 +119,7 @@ def denial_rate(it: Issuer, net: str = "in"):
 
 def plausible(it: Issuer) -> bool:
     v = it.vals
-    for rec, den in (("rec_in", "den_in"), ("rec_out", "den_out")):
+    for rec, den in (("rec_in", "den_in"), ("rec_out", "den_out"), ("rec_all", "den_all")):
         if v.get(rec) is not None and v.get(den) is not None and v[den] > v[rec]:
             return False
     for filed, over in (("int_filed", "int_over"), ("ext_filed", "ext_over")):
@@ -152,20 +162,24 @@ def spearman(pairs):
 
 def year_summary(issuers: list[Issuer]) -> dict:
     ok = [i for i in issuers if plausible(i)]
-    rates = [r for r in (denial_rate(i) for i in ok) if r is not None]
-    summ = {"issuers": len(issuers), "implausible": len(issuers) - len(ok), "with_rate": len(rates)}
-    if rates:
-        summ.update(quartiles(rates) or {})
-        summ["share_above_30pct"] = sum(r > 0.30 for r in rates) / len(rates)
-        pr = sum(i.vals["den_in"] for i in ok if denial_rate(i) is not None) / sum(i.vals["rec_in"] for i in ok if denial_rate(i) is not None)
-        summ["pooled_rate_claim_weighted"] = pr
+    summ = {"issuers": len(issuers), "implausible": len(issuers) - len(ok)}
+    for net in ("all", "in"):
+        used = [(i, denial_rate(i, net)) for i in ok]
+        used = [(i, r) for i, r in used if r is not None]
+        rates = [r for _, r in used]
+        summ[f"with_rate_{net}"] = len(rates)
+        if rates:
+            q = quartiles(rates) or {}
+            summ.update({f"{k}_{net}": v for k, v in q.items()})
+            summ[f"share_above_30pct_{net}"] = sum(r > 0.30 for r in rates) / len(rates)
+            summ[f"pooled_rate_claim_weighted_{net}"] = sum(i.vals[f"den_{net}"] for i, _ in used) / sum(i.vals[f"rec_{net}"] for i, _ in used)
     # appeals
     den = filed = over = ext_f = ext_o = 0.0
     n_int = n_ext = 0
     for i in ok:
         v = i.vals
-        if None not in (v.get("den_in"), v.get("den_out"), v.get("int_filed")) and v["int_filed"] >= 0:
-            den += v["den_in"] + v["den_out"]
+        if v.get("den_all") is not None and v.get("int_filed") is not None and v["int_filed"] >= 0:
+            den += v["den_all"]
             filed += v["int_filed"]
         if v.get("int_filed") is not None and v["int_filed"] >= MIN_APPEALS and v.get("int_over") is not None:
             over += v["int_over"]
@@ -187,9 +201,9 @@ def year_summary(issuers: list[Issuer]) -> dict:
     return summ
 
 
-def persistence(prev: list[Issuer], cur: list[Issuer]) -> dict:
-    p = {i.key: denial_rate(i) for i in prev if plausible(i)}
-    c = {i.key: denial_rate(i) for i in cur if plausible(i)}
+def persistence(prev: list[Issuer], cur: list[Issuer], net: str = "all") -> dict:
+    p = {i.key: denial_rate(i, net) for i in prev if plausible(i)}
+    c = {i.key: denial_rate(i, net) for i in cur if plausible(i)}
     both = [(p[k], c[k]) for k in p if k in c and p[k] is not None and c[k] is not None]
     out = {"issuers_in_both": len(both)}
     if both:
