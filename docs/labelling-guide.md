@@ -34,7 +34,10 @@ above is defined from what the survey measures, not from which result looks bett
 ## Rules
 
 1. Label what the text says, not what the trial probably meant.
-2. "Not pregnant" is exclusion of `pregnancy_or_lactation` present. "No history of X" is exclusion of X present.
+2. Describe the patient state the line states; the section header decides whether it is required (inclusion) or disqualifying (exclusion). "Patients
+   with a prior heart attack" is prior_mi present under either header. "No history of stroke" is prior_stroke absent. "Not pregnant" is
+   pregnancy_or_lactation absent. (Corrected 2026-10-23: an earlier draft of this guide said "no history of X" means exclusion of X present, which
+   conflicts with how the first-pass labels were made; the labels and this guide now agree.)
 3. A range ("18 to 75 years") is two items (`age >= 18`, `age <= 75`).
 4. Unclear thresholds ("elevated", "adequate") get `other`.
 5. Prior or recent time windows ("within 6 months") are recorded in a free-text note and do not change the variable.
