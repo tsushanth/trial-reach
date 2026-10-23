@@ -20,6 +20,11 @@ per-criterion exclusion burden before gold labelling starts. Gold and validation
 - Larger-model run of the 2023 trial-matching test: stopped on 2026-10-22, partial output deliberately not analysed.
 - Literature audit tool: fresh-sample numbers recorded in findings; human spot-check of adjudications still owed.
 
+**Decision 2026-10-22 (owner): treat hosted extraction of public registry text as permitted** ("otherwise they would have had us sign
+something"). Not confirmed against the registry's terms page; recorded as an assumption. Model: claude-haiku-5-5, per-line extraction,
+structured output, public trial text only, hard spend cap in code. Estimated cost for about 1,900 trials: a few dollars (about 38,000
+short calls). Waiting on a credential supplied by the owner in the environment.
+
 **Open questions for the owner.**
 1. Wording of the data rule: allowed to name kinds of public source in general terms in prose (current reading)?
 2. Reframe project 1 to criterion-level exclusion burden (recommended), and local sample versus hosted model for extraction at scale?

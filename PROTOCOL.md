@@ -121,4 +121,8 @@ published or stored in this repository.
   splitting, one model call per line, few-shot prompt, grounding checks in code), after whole-text extraction was found on
   inspection to invert polarity and invent criteria. Prompt and schema hashes are recorded by the code. Whether a 7B or larger
   model is used, and whether extraction runs locally or on a hosted service, is decided before the gold run and recorded here.
+- 0.5 (2026-10-22, before the gold run): extraction runs on a hosted model (claude-haiku-5-5) instead of a local 7B, because
+  local extraction was too inaccurate and too slow on development trials. Only public trial text is sent; no patient data. The owner
+  treated this as permitted; the registry terms were not read in full by the assistant. The line-level method, grounding checks and
+  schema are unchanged. Spend is capped in code. The model identifier, prompt hash and schema hash are recorded with every run.
 

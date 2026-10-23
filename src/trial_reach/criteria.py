@@ -158,10 +158,8 @@ import re
 _HEADER = re.compile(r"^\s*(?:key\s+)?(inclusion|exclusion)\s+criteria\s*:?\s*$", re.I)
 _BULLET = re.compile(r"^\s*(?:[*\-\u2022\u25cf]|\d{1,2}[.)]|[a-z][.)])\s+")
 
-LINE_PROMPT = """A clinical trial lists this line under its {role} criteria:
-<<<
-{line}
->>>
+SENTINEL = "\n\n=== LINE ===\n"
+LINE_SYSTEM = """You read one line of a clinical trial's eligibility criteria and list the measurable conditions it states about a patient.
 
 Task: list ONLY the measurable conditions this exact line states about a patient, using these variables: {variables}.
 Operators: {operators}. Use "present" if the line says the patient has/had the condition, "absent" if the line says the patient does not have it. Use a threshold operator and a number only when the line gives a number. If the line mentions nothing that matches a variable, return an empty list. Never add conditions the line does not state.
@@ -176,6 +174,11 @@ Line: "Life expectancy less than 1 year" -> [{{"variable":"life_expectancy","ope
 Line: "Allergy to contrast media" -> [{{"variable":"allergy_or_intolerance","operator":"present","value":null,"unit":null}}]
 
 Reply with JSON only: {{"items": [{{"variable": "...", "operator": "...", "value": null, "unit": null}}]}}"""
+
+LINE_USER = """The trial lists this line under its {role} criteria:
+<<<
+{line}
+>>>"""
 
 LINE_SCHEMA = {
     "type": "object",
@@ -194,7 +197,14 @@ LINE_SCHEMA = {
 
 
 def line_prompt_hash() -> str:
-    return hashlib.sha256((LINE_PROMPT + json.dumps(LINE_SCHEMA, sort_keys=True)).encode()).hexdigest()
+    return hashlib.sha256((LINE_SYSTEM + LINE_USER + json.dumps(LINE_SCHEMA, sort_keys=True)).encode()).hexdigest()
+
+
+def build_line_prompt(role: str, line: str, max_line_chars: int = 1500) -> str:
+    """System instructions + sentinel + the one line. Local models receive it whole; the hosted client splits at the sentinel
+    so the long static part can be cached."""
+    system = LINE_SYSTEM.format(variables=", ".join(VOCABULARY), operators=", ".join(OPERATORS))
+    return system + SENTINEL + LINE_USER.format(role=role, line=line[:max_line_chars])
 
 
 def split_lines(text: str) -> list[tuple[str, str]]:
@@ -271,7 +281,7 @@ def extract_lines(text: str, llm, max_line_chars: int = 1500):
     """Returns (criteria, failures). One model call per line; a failed or unreadable line is counted, never guessed."""
     out, failed = [], 0
     for role, line in split_lines(text):
-        prompt = LINE_PROMPT.format(role=role, line=line[:max_line_chars], variables=", ".join(VOCABULARY), operators=", ".join(OPERATORS))
+        prompt = build_line_prompt(role, line, max_line_chars)
         try:
             items = parse_line_items(llm(prompt), role, line)
         except Exception:

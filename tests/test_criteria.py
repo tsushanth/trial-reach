@@ -134,3 +134,37 @@ def test_grounding_filters_drop_unsupported_absent_and_numbers():
 
 def test_split_lines_unescapes_markdown_symbols():
     assert cr.split_lines("Inclusion Criteria:\n* Age \\>18")[0][1] == "Age >18"
+
+
+def test_hosted_client_caps_spend_splits_prompt_and_makes_schema_safe():
+    import pytest
+    from types import SimpleNamespace as NS
+
+    from trial_reach.hosted import HostedLLM, SpendCapExceeded, hosted_schema
+
+    sch = hosted_schema(cr.LINE_SCHEMA)
+    item = sch["properties"]["items"]
+    assert "maxItems" not in item and item["items"]["additionalProperties"] is False
+    assert item["items"]["properties"]["value"] == {"anyOf": [{"type": "number"}, {"type": "null"}]}
+    assert cr.LINE_SCHEMA["properties"]["items"]["maxItems"] == 4  # original untouched
+
+    seen = []
+
+    class Fake:
+        class messages:
+            @staticmethod
+            def create(**kw):
+                seen.append(kw)
+                return NS(content=[NS(type="text", text='{"items": []}')],
+                          usage=NS(input_tokens=1_000_000, output_tokens=0, cache_read_input_tokens=0, cache_creation_input_tokens=0))
+
+    llm = HostedLLM("claude-haiku-5-5", cr.LINE_SCHEMA, max_cost_usd=0.15, client=Fake)
+    prompt = cr.build_line_prompt("exclusion", "Prior stroke")
+    assert llm(prompt) == '{"items": []}'
+    kw = seen[0]
+    assert "Prior stroke" in kw["messages"][0]["content"] and "Prior stroke" not in kw["system"][0]["text"]
+    assert "temperature" not in kw and kw["system"][0]["cache_control"] == {"type": "ephemeral"}
+    assert llm.cost == pytest.approx(0.10)
+    llm(prompt)  # second call brings the estimate to 0.20 which is over the cap
+    with pytest.raises(SpendCapExceeded):
+        llm(prompt)
