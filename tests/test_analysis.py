@@ -44,3 +44,14 @@ def test_anyfail_and_subgroup_means():
     assert ev.weighted_mean(arr, (d.age >= 65).to_numpy().astype(float)) == pytest.approx(1.0)
     assert ev.weighted_mean(arr, (d.age < 65).to_numpy().astype(float)) == pytest.approx(0.0)
     assert ev.anyfail([an.criterion_key("exclusion", "lvef", "<", 35, "%")]) == (None, 0)
+
+
+def test_measured_only_drops_history_flags_and_own_condition():
+    ev = an.Evaluator(frame())
+    crit = [{"type": "exclusion", "variable": "age", "operator": ">", "value": 60, "unit": "years"},
+            {"type": "exclusion", "variable": "prior_stroke", "operator": "present", "value": None, "unit": None},   # the group's own condition
+            {"type": "exclusion", "variable": "heart_failure", "operator": "present", "value": None, "unit": None}]  # history flag
+    s = an.trial_summary(ev, "stroke", crit)
+    assert s["n_translatable"] == 1 and s["lower_bound_burden"] == pytest.approx(3 / 8)
+    s2 = an.trial_summary(ev, "stroke", crit, measured_only=False)
+    assert s2["n_translatable"] == 2  # the history flag counts when asked for, the own-condition criterion never does

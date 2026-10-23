@@ -13,6 +13,13 @@ import pandas as pd
 from trial_reach import survey as sv
 
 
+# Headline burden uses criteria that are MEASUREMENTS (or pregnancy). Diagnosis, history and medication flags drop the severity, timing and
+# qualifiers that matter ("recent", "severe", "uncontrolled"), so the survey's "ever" flag overstates their burden; they are reported separately.
+MEASURED = {"age", "bmi", "systolic_bp", "diastolic_bp", "egfr_or_crcl", "serum_creatinine", "hba1c", "ldl_c", "total_cholesterol", "hdl_c",
+            "triglycerides", "alt", "ast", "albumin", "potassium", "uric_acid", "albuminuria", "platelets", "wbc", "hemoglobin",
+            "pregnancy_or_lactation"}
+
+
 def criterion_key(role: str, variable: str, operator: str, value, unit) -> tuple:
     v = None if value is None else round(float(value), 3)
     return (role, variable, operator, v, (unit or "").lower().replace(" ", ""))
@@ -76,11 +83,15 @@ class Evaluator:
         return (float((w * dom * anyfail).sum() / tot) if tot else None), len(vecs)
 
 
-def trial_summary(ev: Evaluator, group: str, criteria: list[dict]) -> dict:
-    """criteria: dicts with type, variable, operator, value, unit (the extraction output)."""
+def trial_summary(ev: Evaluator, group: str, criteria: list[dict], measured_only: bool = True) -> dict:
+    """criteria: dicts with type, variable, operator, value, unit (the extraction output). With measured_only, only measurement-based criteria
+    count as translatable; criteria on the group's own defining condition never do."""
+    from trial_reach.grouping import OWN_CONDITION_VARIABLES
+
     keys = [criterion_key(c["type"], c["variable"], c["operator"], c.get("value"), c.get("unit")) for c in criteria]
     n = len(keys)
-    translatable = [k for k in keys if ev.fail_vector(k) is not None]
+    own = OWN_CONDITION_VARIABLES.get(group, set())
+    translatable = [k for k in keys if k[1] not in own and (not measured_only or k[1] in MEASURED) and ev.fail_vector(k) is not None]
     lb, used = ev.trial_lower_bound(group, translatable)
     return {"n_criteria": n, "n_translatable": len(translatable), "translatable_fraction": (len(translatable) / n) if n else None,
             "lower_bound_burden": lb, "n_combined": used, "keys": translatable}

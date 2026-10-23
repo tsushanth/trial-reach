@@ -150,4 +150,14 @@ published or stored in this repository.
     denominator (complete case) and the number left out is reported.
   - Alcohol use has no translation (no clear single definition) and is reported as untranslatable. Sex criteria are not evaluated.
   - Trials are assigned to the first condition group that found them; trials listed under several conditions are analysed once, under that group.
+- 0.8 (2026-10-23, AFTER the first full run; this is a post-hoc correction and the results below the line are labelled accordingly). The first run (run A, as
+  specified in 0.3 and 0.7) gave implausible trial-level numbers: median lower-bound burden 82% and upper quartile 100%. Diagnosis, from inspecting the
+  top criteria: (1) group assignment used which search found a trial first, so trials were placed in the wrong population (and the hypertension search also
+  returned pulmonary, portal and ocular hypertension trials); (2) criteria that define the trial's own disease (for example "prior stroke" in a stroke trial) were
+  scored against that disease's population and failed 100% by construction; (3) history and diagnosis flags ignore the qualifiers the extraction dropped
+  (recent, severe, uncontrolled), so the survey's "ever" flag overstates their burden. Changes: group assignment now comes from each trial's own condition list
+  with other diseases of the same word excluded; criteria on a group's own defining condition are never scored; the headline burden uses measurement-based criteria
+  only (age, body mass index, blood pressure, kidney function, HbA1c, lipids, other laboratory values, albuminuria, pregnancy); history, diagnosis and
+  medication flags are reported separately as "ever-history upper bounds" and are never combined into the trial-level figure. Run A is reported in the
+  findings as a failed first attempt; the revised run (run B) is post-hoc and its results are exploratory, not confirmatory.
 
