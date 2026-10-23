@@ -75,3 +75,62 @@ def test_schema_enums_match_vocabulary_and_payload_uses_it():
     p = OllamaLLM("m", schema=cr.SCHEMA).payload("x")
     assert p["format"] == cr.SCHEMA and p["options"]["temperature"] == 0 and p["stream"] is False
     assert OllamaLLM("m").payload("x")["format"] == "json"
+
+
+SAMPLE = """Inclusion Criteria:
+
+* Age \\>18
+* Referred for ablation for symptomatic
+  persistent atrial fibrillation
+
+Exclusion Criteria:
+
+* Patients with a myocardial infarction in the previous 2 months
+* LV ejection fraction < 35%
+"""
+
+
+def test_split_lines_uses_headers_joins_continuations():
+    lines = cr.split_lines(SAMPLE)
+    assert [r for r, _ in lines] == ["inclusion", "inclusion", "exclusion", "exclusion"]
+    assert "persistent atrial fibrillation" in lines[1][1] and lines[2][1].startswith("Patients with")
+    assert cr.split_lines("") == [] and cr.split_lines("Just one line of text")[0][0] == "inclusion"
+
+
+def test_extract_lines_assigns_role_from_section_and_counts_failures():
+    calls = []
+
+    def fake(prompt):
+        calls.append(prompt)
+        line = prompt.split("<<<\n", 1)[1].split("\n>>>", 1)[0]  # the examples in the prompt must not drive the fake
+        if "ejection" in line:
+            raise RuntimeError("down")
+        if "myocardial" in line:
+            return json.dumps({"items": [{"variable": "prior_mi", "operator": "present", "value": None, "unit": None}]})
+        return json.dumps({"items": []})
+
+    out, failed = cr.extract_lines(SAMPLE, fake)
+    assert failed == 1 and len(calls) == 4
+    assert [(c.type, c.variable, c.operator) for c in out] == [("exclusion", "prior_mi", "present")]
+
+
+def test_parse_line_items_out_of_vocabulary_becomes_other():
+    out = cr.parse_line_items(json.dumps({"items": [{"variable": "made_up", "operator": ">=", "value": 3, "unit": None}]}), "inclusion")
+    assert out[0].variable == "other" and out[0].variable_raw == "made_up" and not out[0].computable
+    assert cr.parse_line_items("garbage", "inclusion") is None
+
+
+def test_grounding_filters_drop_unsupported_absent_and_numbers():
+    def items(line, *specs):
+        raw = json.dumps({"items": [{"variable": v, "operator": op, "value": val, "unit": None} for v, op, val in specs]})
+        return [(c.variable, c.operator) for c in cr.parse_line_items(raw, "exclusion", line)]
+
+    assert items("Patients with congenital heart disease", ("heart_failure", "absent", None)) == []
+    assert items("No history of stroke", ("prior_stroke", "absent", None)) == [("prior_stroke", "absent")]
+    assert items("LVEF below 35%", ("lvef", "<", 35)) == [("lvef", "<")]
+    assert items("Life expectancy under one year", ("life_expectancy", "<", 1)) == [("life_expectancy", "<")]
+    assert items("Severe renal disease", ("egfr_or_crcl", "<", 30)) == []
+
+
+def test_split_lines_unescapes_markdown_symbols():
+    assert cr.split_lines("Inclusion Criteria:\n* Age \\>18")[0][1] == "Age >18"

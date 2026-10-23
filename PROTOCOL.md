@@ -117,4 +117,8 @@ published or stored in this repository.
   validation and gold trials. Extraction is local only (7B model). A hosted model was considered for speed; the registry's
   terms could not be fully read by the assistant and the owner chose local extraction. The accuracy bar (F1 at least 0.80, lower
   interval at least 0.75) is now assessed on computable-variable items only.
+- 0.4 (2026-10-22, development data only): extraction method changed from whole-text to line-level (code-based section and line
+  splitting, one model call per line, few-shot prompt, grounding checks in code), after whole-text extraction was found on
+  inspection to invert polarity and invent criteria. Prompt and schema hashes are recorded by the code. Whether a 7B or larger
+  model is used, and whether extraction runs locally or on a hosted service, is decided before the gold run and recorded here.
 

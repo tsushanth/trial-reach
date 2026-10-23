@@ -20,3 +20,20 @@ defined and is the more robust target.
 Speed: about 40 seconds per trial on a laptop with a 7B model; the full selection (13,735 trials) would take about 150 hours, so
 the analysis needs a stratified sample or faster compute. Public registry text is not restricted, so a hosted model is an
 option, subject to cost.
+
+## Extraction quality problem and redesign (2026-10-22, development data only)
+
+- Run 4 (whole-text extraction, decoding constrained to the fixed vocabulary): "other" fell to 5% and the computable share rose
+  to 48%, but reading one trial by eye showed the rise was not real: the 7B model inverted polarity ("exclude if prior heart
+  attack is absent"), listed conditions the text never mentions (hypertension, cancer history, anticoagulant use) and missed
+  others (stroke, congenital heart disease, cardiomyopathy). Constrained decoding made the model fill the list. Three trials
+  timed out.
+- Redesign (method version 2): split the text in code into sections and lines (the section header decides inclusion or exclusion),
+  one model call per line, a few-shot prompt, at most four items per line, and two grounding checks in code: "absent" is only
+  accepted when the line contains a negation cue, and a threshold number must appear in the line. Nothing is repaired.
+- Eyeball on one trial (19 lines): 7B with the few-shot line prompt got about 14 lines right with 4 to 5 wrong or spurious items
+  (for example a rhythm line labelled cancer history); 14B got the hard lines right more often but added spurious "absent"
+  items on others, and was 3 times slower (about 10 s per line versus 3.6 s). The grounding checks remove the spurious "absent"
+  items. This is one trial and my own judgement, not a measurement; the gold set measures it.
+- Speed: 7B takes about 70 s per trial, so 1,500 trials is about 30 hours and the 200 gold trials about 4 hours. 14B is about 3
+  times that.
