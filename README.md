@@ -9,6 +9,11 @@ national survey data. The aim is a transparent, reproducible measure of how well
 Status: protocol stage. No results yet. See [PROTOCOL.md](PROTOCOL.md). The running record of all research so far, including
 earlier work and its findings, is in [docs/research-log](docs/research-log/README.md).
 
+## Projects
+
+- Trial eligibility reach (this protocol, `PROTOCOL.md`)
+- Official insurer-reported claim denial and appeal data, a research track (`projects/claim-denials/PROTOCOL.md`)
+
 ## What this repository contains
 
 Code, documentation and the protocol. Nothing else.
