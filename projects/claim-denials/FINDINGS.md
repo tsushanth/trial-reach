@@ -51,3 +51,16 @@ again, so a reported denial is not necessarily a final refusal.
 - It supports: the level of reported denials in this market, the persistence of issuer differences in recent years, how rarely denials are appealed, and a warning that reported denials include administrative rejections and resubmissions.
 - It does not support: any statement that an issuer is better or worse, comparisons with employer plans, Medicare Advantage or Medicaid, or conclusions about final refusals. Counts are insurer-reported and unaudited here.
 - Next options: add the Medicare Advantage prior-authorization series; check the survey-year definitions; plan the lawyer review before any issuer-level publication.
+
+## Medicare Advantage prior authorization, free route (2026-10-24; protocol 0.4; provisional, read by an assistant from public pages, not yet re-checked)
+
+No organisation names here (private working table only).
+
+- **Cross-check, published national figures (health-policy research organisation, from the federal determinations data):** 2024: 52.8 million determinations, 7.7% denied, 11.5% of denials appealed, 80.7% of appeals partly or fully overturned. 2023: 49.8 million, 6.4% denied, 11.7% appealed.
+  2022: 7.4% denied in the text, other 2022 figures only in a chart. Per-parent denial rates for 2024 ranged from about 4% to about 13% among the four largest parents with text figures.
+- **Payers' own postings (first postings under the 2026 rule, calendar-year 2025 data):** of the 10 largest parents, 5 had a retrievable page (the page for 4 of them covered one contract or region, not the whole parent); 4 had no findable Medicare Advantage page; 1 could not be identified.
+  Standard-request denial percentages in the retrievable postings ranged from about 6% to 16% (one contract each, except one parent summed over its contracts: about 13%), expedited from about 4% to 17%.
+- **Comparability problems found:** parents post at different levels (all contracts in one table, one document per contract, or by region); "approved after appeal" has different or unstated denominators; one parent posts percentages only, others counts; decision times are in days or in hours; no payer states whether withdrawn requests are excluded; one parent's web headline excludes categories that its document includes.
+- **One unexplained gap:** an independent published 2025-postings brief gives a different standard denial rate for the largest parent (17%) than the sum computed here from its contract table (13.5%); not resolved.
+- **A third-party tracker's claims** (coverage, national rate) are unverified and conflict with the published enrollment figure for the largest parent.
+- **Reading:** a pooled cross-organisation comparison from postings is not currently feasible without per-contract reading of dozens of documents and assumptions about definitions. The national figures from the published analysis remain the usable benchmark; contract-level history would need the paid limited data set.
