@@ -88,3 +88,16 @@ environment variable. Nothing about where the files live is stored here.
   values); (5) pooled national denial rate compared with the published KFF figures (6.4 percent for 2023, 7.7 percent for 2024, prior authorization)
   as a cross-check only. Caveats to carry: self-reported; Medicare Advantage only; service determinations only; whether partial denials count as
   denials must be read from the dictionary before any run.
+- 0.4 (2026-10-24, owner chose the free route: cite published analyses as the cross-check, and collect the payers' own public prior-authorization postings
+  instead of buying the limited data set; nothing collected yet when this was written): Medicare Advantage prior-authorization series, free route.
+  Sources: (a) published analyses by a health-policy research organisation of the federal determinations data, used only as an external cross-check, cited
+  by title, year and DOI or address of the report, never re-derived here; (b) each large Medicare Advantage parent organisation's own public posting of
+  prior-authorization metrics required by the 2024 federal interoperability and prior-authorization rule (first postings due 2026): percent of requests approved,
+  denied, and approved after appeal, and decision times, for medical items and services (drugs excluded).
+  Pre-specified questions: (1) for the parents whose postings are found and readable, the reported denial percentage and the approved-after-appeal percentage,
+  each with the posting's year; (2) how closely the pooled figure of those parents matches the published national figures (cross-check only); (3) whether the
+  postings use comparable definitions (denial includes or excludes post-appeal outcomes; withdrawn or dismissed requests; contract versus parent level);
+  (4) how many of the largest parents were found, posted, machine-readable. No claim about better or worse organisations; posting figures describe
+  requests, not quality. Organisation names stay out of committed files (private working table only); the committed findings give counts and ranges.
+  Collection is manual reading of public pages (no bulk scraping, no login, no circumvention); pages that block automated reading are recorded as not retrieved.
+
