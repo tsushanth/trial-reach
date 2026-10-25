@@ -13,7 +13,9 @@ import threading
 from trial_reach.criteria import SENTINEL
 
 # $ per million tokens for claude-haiku-5-5 prompts up to 100K tokens (cache reads and writes priced at standard multiples).
-PRICES = {"claude-haiku-5-5": (0.10, 0.50)}
+PRICES = {"claude-haiku-5-5": (0.10, 0.50), "claude-sonnet-5-5": (2.00, 10.00)}
+# thinking setting per model: Haiku 5.5 accepts "disabled" at low effort; Sonnet 5.5 rejects it and uses "between_tools" to switch thinking off
+THINKING = {"claude-haiku-5-5": {"type": "disabled"}, "claude-sonnet-5-5": {"type": "between_tools"}}
 
 
 def hosted_schema(schema: dict) -> dict:
@@ -59,7 +61,7 @@ class HostedLLM:
             model=self.model, max_tokens=self.max_tokens,
             system=[{"type": "text", "text": system, "cache_control": {"type": "ephemeral"}}],
             messages=[{"role": "user", "content": user}],
-            thinking={"type": "disabled"},
+            thinking=THINKING[self.model],
             output_config={"effort": "low", "format": {"type": "json_schema", "schema": self.schema}},
         )
         u = r.usage

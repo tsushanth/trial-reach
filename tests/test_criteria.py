@@ -168,3 +168,22 @@ def test_hosted_client_caps_spend_splits_prompt_and_makes_schema_safe():
     llm(prompt)  # second call brings the estimate to 0.20 which is over the cap
     with pytest.raises(SpendCapExceeded):
         llm(prompt)
+
+
+def test_hosted_thinking_setting_is_model_specific():
+    from types import SimpleNamespace as NS
+
+    from trial_reach.hosted import HostedLLM
+
+    seen = []
+
+    class Fake:
+        class messages:
+            @staticmethod
+            def create(**kw):
+                seen.append(kw)
+                return NS(content=[NS(type="text", text="{}")], usage=NS(input_tokens=1, output_tokens=1, cache_read_input_tokens=0, cache_creation_input_tokens=0))
+
+    for model, expect in (("claude-haiku-5-5", "disabled"), ("claude-sonnet-5-5", "between_tools")):
+        HostedLLM(model, cr.LINE_SCHEMA, max_cost_usd=1, client=Fake)(cr.build_line_prompt("exclusion", "x"))
+        assert seen[-1]["thinking"] == {"type": expect}

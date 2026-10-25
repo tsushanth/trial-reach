@@ -87,3 +87,11 @@ by several points, so burdens for those groups should be quoted with their inter
 
 **C1 reviewer note (2026-10-25).** The owner will do the human review personally. The owner has not seen the model output or the first-pass labels, but directed the project and has read the labelling guide and this plan; this is a weaker independence than a reviewer outside the project, and
 the review is therefore recorded as "project owner, blind to model output". If time allows a second reviewer should label a subset so agreement can be reported.
+
+## Addendum 2026-10-25 (before C4 was run): C4 scoring details
+
+- Sample: 500 trials drawn at random (seed 20261025) from those with an extraction and a condition group. Three extractions of each: the original run (model A, haiku class), a repeat of model A, and model B (a differently built, larger model of the same family, sonnet class). Same prompt text and schema for all.
+- Item key per trial: role, variable, operator and value rounded to 4 decimals, restricted to the measurable (computable) variables. Per-trial agreement is the Jaccard index of the two item sets; two empty sets count as 1.0 (both extractions agree there is nothing measurable). Averages are reported with and without such trials, and the count of trials with a different number of measurable items is reported.
+- Pass rule as in section 3: average Jaccard at least 0.80 between model A and model B, and at least 0.90 between the original and the repeat of model A; the stated rule is on the average over all 500 trials (empty-empty counted as 1.0).
+- Spend cap in code: 12 US dollars across the two new runs.
+
