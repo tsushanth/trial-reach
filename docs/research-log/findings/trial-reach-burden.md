@@ -1,3 +1,5 @@
+> Label: exploratory (post-hoc run B). Not confirmed; see ../confirmatory-plan-run-b.md before citing any number.
+
 # Trial eligibility reach: exclusion burden, first full runs (2026-10-23)
 
 Aggregates only. Extraction: frozen hosted pipeline (line level, protocol 0.6) over 13,335 trials; survey: 2017 to March 2020 national examination survey, adults, design-weighted

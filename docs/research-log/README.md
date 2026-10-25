@@ -19,4 +19,5 @@ Contents:
 - [03-mistakes-and-corrections.md](03-mistakes-and-corrections.md): what went wrong and how it was fixed
 - [04-data-landscape.md](04-data-landscape.md): which kinds of data exist, what is open, what is gated
 - [05-gap-scan.md](05-gap-scan.md): the 2026-10-22 survey of research questions and the novelty checks
+- [confirmatory-plan-run-b.md](confirmatory-plan-run-b.md): what is confirmatory, what stays exploratory, and how the post-hoc correction is labelled
 - [findings/](findings/): results so far, one file per line of work

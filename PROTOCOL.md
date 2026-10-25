@@ -160,4 +160,6 @@ published or stored in this repository.
   only (age, body mass index, blood pressure, kidney function, HbA1c, lipids, other laboratory values, albuminuria, pregnancy); history, diagnosis and
   medication flags are reported separately as "ever-history upper bounds" and are never combined into the trial-level figure. Run A is reported in the
   findings as a failed first attempt; the revised run (run B) is post-hoc and its results are exploratory, not confirmatory.
+- 0.9 (2026-10-24): the confirmatory plan for the post-hoc run B is in `docs/research-log/confirmatory-plan-run-b.md` (steps C1 to C4, what stays exploratory, labels, consequences).
+  Run B numbers remain exploratory until C1 and C2 pass; no change to the extraction configuration.
 
