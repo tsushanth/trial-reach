@@ -67,3 +67,12 @@ recompute the usage shares and compare with the pre-snapshot sets; otherwise rep
 ## 6. Constraints
 
 No data, record identifiers, local paths or links to data services are stored here (the repository rule). Hand-labelled items and checked samples are kept outside the repository; only aggregate counts and intervals are written back.
+
+## Addendum 2026-10-25 (before C3 was run): operational details, one correction
+
+- Correction to section 3: C3 lists 11 criteria, not "10 criterion-group sets": age over 65, 70, 75; eGFR under 30, 45, 60; systolic blood pressure over 160 and 180; HbA1c over 8 and 9; BMI over 40; each in 4 condition groups (44 cells).
+- Cells: a cell passes if the earlier-cycle estimate is within 5 percentage points (absolute) of the 2017 to 2020 estimate, or the difference is within 1.96 times the square root of the sum of the two squared standard errors. A criterion is "unstable" in a cycle if it fails in 2 or more of its 4 groups.
+  The burden table is withdrawn as a general figure if more than a third of the 11 criteria (4 or more) are unstable in either cycle.
+- Cycle adaptation, fixed here, limited to variable names: weights renamed to the two-year examination and fasting weights of each cycle; blood pressure in 2013 to 2016 comes from the auscultatory readings (mean of the first three
+  available readings) instead of the oscillometric device used from 2017; everything else (age 18 and over, kidney function equation, condition definitions, design-based errors) is unchanged. The blood-pressure device change is a known measurement difference; a blood-pressure criterion that fails
+  is reported as such and flagged as possibly caused by the device change, but it still counts as a failure.
