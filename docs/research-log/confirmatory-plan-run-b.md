@@ -80,7 +80,7 @@ No data, record identifiers, local paths or links to data services are stored he
 ## Result log
 
 **C3 run 2026-10-25 (survey-side replication; aggregate only).** Two earlier examination-survey cycles (2013 to 2014 and 2015 to 2016; 6,113 and 5,992 adults; condition-group samples 182 to 2,459 and 214 to 2,432 people, heart failure the smallest),
-same derivation and design-based errors, only the name adaptations fixed in the addendum above. Of 88 criterion-group-cycle cells, **4 failed** the pre-specified rule (a difference above 5 points and outside the combined 95% interval): systolic-independent age caps in heart failure
+same derivation and design-based errors, only the name adaptations fixed in the addendum above. Of 88 criterion-group-cycle cells, **4 failed** the pre-specified rule (a difference above 5 points and outside the combined 95% interval): age caps in heart failure
 in 2015 to 2016 (over 65: 66% against 50%; over 70: 52% against 39%) and two kidney-function cells in stroke in 2013 to 2014 (eGFR under 45: 14.8% against 7.5%; under 60: 32% against 23%). **No criterion was unstable** (a criterion needs 2 or more failing groups), so
 the burden table is not withdrawn. The blood-pressure criteria, whose device changed in 2017, did not fail in any cell. Reading: the single-criterion burdens are broadly reproducible across survey cycles; the heart-failure and stroke groups are small and their estimates move
 by several points, so burdens for those groups should be quoted with their intervals. Result of C3: PASS under the pre-specified rule.
