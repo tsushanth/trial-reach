@@ -95,3 +95,10 @@ the review is therefore recorded as "project owner, blind to model output". If t
 - Pass rule as in section 3: average Jaccard at least 0.80 between model A and model B, and at least 0.90 between the original and the repeat of model A; the stated rule is on the average over all 500 trials (empty-empty counted as 1.0).
 - Spend cap in code: 12 US dollars across the two new runs.
 
+
+**C4 run 2026-10-25 (extraction stability; 500 random trials with an extraction and a condition group; aggregate only).** Total hosted spend for the two new runs: about 7.7 US dollars (repeat run 0.36, larger model 7.31); 0 failed lines in either run.
+- Original run against a repeat of the same model: mean Jaccard **0.941** (0.940 excluding trials with no measurable items); identical measurable-item sets in 69% of trials; a different number of measurable items in 28%. Rule: at least 0.90. **PASS.**
+- Original run against the larger model: mean Jaccard **0.865** (0.862 excluding empty trials; variable-level 0.881); identical sets in 45%; a different count in 47%. Rule: at least 0.80. **PASS.**
+- Mean measurable items per trial: 6.80 (original), 6.79 (repeat), 7.04 (larger model).
+- Reading: the extraction is stable on repeat and agrees substantially across a differently built model, so criterion-level numbers do not hinge on one model's quirks. But only 45% of trials get exactly the same measurable-item set from the two models, so any figure that depends on the whole item set of a single trial
+  (the trial-level lower bound) is more sensitive than the single-criterion burdens; keep trial-level numbers labelled exploratory. Stability is not correctness: this does not replace C1.
