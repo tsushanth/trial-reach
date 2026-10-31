@@ -1,4 +1,4 @@
-> Label: exploratory (post-hoc run B). Not confirmed; see ../confirmatory-plan-run-b.md before citing any number.
+> Label: exploratory (post-hoc run B, and run C its header-corrected rerun; C is the corrected one). Not confirmed; see ../confirmatory-plan-run-b.md before citing any number.
 
 # Trial eligibility reach: exclusion burden, first full runs (2026-10-23)
 
@@ -57,3 +57,32 @@ Does not show: total reach of any single trial, anything about final trial enrol
 1. The human review of the gold labels (at least 25%) must confirm the extraction accuracy.
 2. The run B correction is post-hoc; a fresh confirmatory analysis plan should be written before any publication, ideally with a held-out validation set of trials.
 3. Check the several-conditions assignment (first listed condition) and the pulmonary and other exclusions on a hand-checked sample.
+
+## Run C (run B with the section-header fix; exploratory, 2026-10-31)
+
+**What was wrong in run B.** The rule that splits a trial's eligibility text into inclusion and exclusion sections did not recognise several header forms (bulleted or bold headers, headers with words before or after
+the phrase). Lines under such a header kept the previous section's role, so exclusion lines were read as inclusion in about 1.2% of trials (168 trials; 1,717 of 192,210 lines; 99% of the flips were exclusion read as
+inclusion). A read-only count found 305 trials whose split changed under a first version of the fix; the final rule (which also accepts words before the phrase) changes 462, of which 445 had an extraction.
+
+**What was done.** Header rule fixed (method version 2.1; the model prompt and its hash are unchanged), with tests for each header form and for content lines that must not count as headers. The 445 trials were
+re-extracted with the same hosted model and cap (11,007 lines, 1 failed; about $0.56). Everything else in the analysis is run B's code and inputs. Run B's results are kept unchanged and remain the frozen
+record; **run C is the corrected one and is the run to cite for any number below, always labelled exploratory and next to run B.**
+
+| Aggregate | Run B | Run C |
+|---|---|---|
+| Trials analysed / with a lower bound | 9,759 / 8,144 | 9,759 / 8,144 |
+| Median translatable fraction | 0.156 | 0.156 |
+| Trials with at least 70% translatable (n) | 64 | 64 |
+| Median lower-bound burden, all trials | 0.110 | 0.104 |
+| Upper quartile of lower-bound burden | 0.745 | 0.718 |
+| Median, coronary / heart failure / hypertension / stroke | 0.033 / 0.066 / 0.803 / 0.001 | 0.028 / 0.066 / 0.802 / 0.001 |
+| Median, industry-sponsored trials | 0.448 | 0.348 |
+| Median, 2005 to 2009 / 2010 to 2014 | 0.198 / 0.141 | 0.174 / 0.116 |
+| High-translatable trials: median lower bound (reach upper bound) | 0.777 (0.223) | 0.777 (0.223) |
+
+At trial level, 268 trials had a lower bound in both runs and a changed extraction: 110 went down, 4 went up, 99 moved by more than 0.10 and 87 by more than 0.25. No trial gained or lost its lower bound.
+Direction is as expected: an exclusion line read as an inclusion requirement counted everyone without the condition as excluded, so run B overstated burden in the affected trials.
+
+**Reading.** The overall picture, the translatable-fraction results and the high-translatable result do not change. Group-level medians change little, but the upper quartiles and the industry-sponsor median move
+noticeably, so any statement about sponsor differences or period trends should use run C. Limits: these are still lower bounds; the new rule for headers with words before the phrase is a judgement
+(443 distinct newly matched forms were reviewed by form, not line by line); 17 of the 462 affected trials had no extraction and are outside this comparison.

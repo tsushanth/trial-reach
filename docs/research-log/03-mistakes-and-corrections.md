@@ -18,3 +18,6 @@ Kept in full because they changed the direction of the work.
   (fixed so errored rows are retried); a global git hooks path silently disabled a local hook (fixed 2026-10-22).
 - **Memory limits.** Running a 14-billion-parameter model on a 16 GB laptop exhausted memory; an 8 GB second machine cannot
   run it at all.
+- **Section-header blind spot (found 2026-10-30, fixed 2026-10-31).** The rule that splits eligibility text into inclusion and exclusion sections missed several header forms, so exclusion lines were read as
+  inclusion in about 1.2% of trials (run B). A side project's agent found it; it was measured read-only, fixed with tests, and the affected trials re-extracted as run C. Run B is kept unchanged; both are
+  reported, run C as the corrected one ([findings](findings/trial-reach-burden.md)). Lesson: test the splitting rule on the whole corpus before freezing it, not only on development trials.

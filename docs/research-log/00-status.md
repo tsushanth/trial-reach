@@ -15,7 +15,7 @@ population survey ([findings](findings/trial-reach-development.md)); deciding wh
 per-criterion exclusion burden before gold labelling starts. Gold and validation sets untouched.
 
 **Project 1 update (2026-10-23):** bulk extraction complete (13,335 trials, about $9.3 of hosted-model spend, 0.004% lines failed). First full burden run failed validity checks and was corrected
-post-hoc (protocol 0.8); corrected run B findings in `docs/research-log/findings/trial-reach-burden.md` (exploratory). Prior-work check: partly done (closest is a 2026 study of BMI criteria in 352 GLP-1
+post-hoc (protocol 0.8); corrected run B findings in `docs/research-log/findings/trial-reach-burden.md` (exploratory). **2026-10-31:** a section-header bug affecting about 1.2% of trials was found and fixed; run C (rerun of the affected trials) is the corrected run and is reported next to run B (same file, exploratory). Prior-work check: partly done (closest is a 2026 study of BMI criteria in 352 GLP-1
 trials with the same survey); positioning is scale, automation, cardiovascular focus, trends and sponsor analysis (`findings/trial-reach-prior-work.md`). Human review form built (private); awaiting the reviewer.
 
 **Second project (research track, started 2026-10-23): official claim-denial data.** Protocol `projects/claim-denials/PROTOCOL.md`, first findings
