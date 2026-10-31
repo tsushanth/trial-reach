@@ -187,3 +187,17 @@ def test_hosted_thinking_setting_is_model_specific():
     for model, expect in (("claude-haiku-5-5", "disabled"), ("claude-sonnet-5-5", "between_tools")):
         HostedLLM(model, cr.LINE_SCHEMA, max_cost_usd=1, client=Fake)(cr.build_line_prompt("exclusion", "x"))
         assert seen[-1]["thinking"] == {"type": expect}
+
+
+def test_header_variants_set_the_role():
+    for h in ["* Exclusion criteria:", "**Exclusion Criteria**", "- Exclusion criteria", "Exclusion criteria for part A:",
+              "Angiographic Exclusion Criteria", "* EXCLUSION CRITERIA:", "Exclusion Criteria (healthy volunteers):", "# Exclusion Criteria"]:
+        lines = cr.split_lines(f"Inclusion Criteria:\n* Age >= 18\n{h}\n* Prior MI")
+        assert [r for r, _ in lines] == ["inclusion", "exclusion"], h
+
+
+def test_header_regex_does_not_swallow_content_lines():
+    for t in ["Other protocol-defined exclusion criteria may apply", "* No exclusion criteria", "Meets exclusion criteria for the parent study",
+              "Exclusion criteria include prior MI", "Patients who fail the exclusion criteria are not enrolled."]:
+        lines = cr.split_lines(f"Inclusion Criteria:\n* {t}\n* Age >= 18")
+        assert [r for r, _ in lines] == ["inclusion", "inclusion"], t

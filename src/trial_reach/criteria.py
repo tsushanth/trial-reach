@@ -155,7 +155,14 @@ def extract(text: str, llm) -> tuple[list[Criterion] | None, int]:
 
 import re
 
-_HEADER = re.compile(r"^\s*(?:key\s+)?(inclusion|exclusion)\s+criteria\s*:?\s*$", re.I)
+# Section header. Version 2.1 (2026-10-31) also accepts a leading bullet or bold marker ("* Exclusion criteria:", "**Exclusion Criteria**"),
+# up to three words before the phrase ("Angiographic Exclusion Criteria"), and a qualifier after it when the line ends in a colon
+# ("Exclusion criteria for part A:"). Prose such as "Other protocol-defined exclusion criteria may apply" is still not a header.
+_HEADER = re.compile(
+    r"^\s*(?:[*\-\u2022\u25cf#>]\s*)*(?:\*\*|__)?\s*(?:(?!(?:no|not|without|any|all)\b)[A-Za-z/-]+\s+){0,3}?(?:key\s+)?(inclusion|exclusion)\s+criteria"
+    r"(?:\s*(?:\*\*|__)?\s*:?|\s*(?:\([^)\n]{1,40}\)|(?:for|-|\u2013|\u2014)\s*[^\n:]{1,50})\s*(?:\*\*|__)?\s*:)\s*(?:\*\*|__)?\s*$",
+    re.I,
+)
 _BULLET = re.compile(r"^\s*(?:[*\-\u2022\u25cf]|\d{1,2}[.)]|[a-z][.)])\s+")
 
 SENTINEL = "\n\n=== LINE ===\n"
